@@ -26,4 +26,20 @@ class AuthModel
             ]);
         }
     }
+
+    public function getPasswordByMasterUserID($masterUserID)
+    {
+        try {
+            $stmt = $this->conn->prepare("SELECT password FROM auth_users WHERE masterUserID = :masterUserID AND deletedDate IS NULL");
+            $stmt->bindParam(":masterUserID", $masterUserID);
+            $stmt->execute();
+            return $stmt->fetch(PDO::FETCH_ASSOC)["password"];
+        } catch (PDOException $e) {
+            http_response_code(500);
+            echo json_encode([
+                "message" => "something is wrong" . $e->getMessage(),
+                "data" => null,
+            ]);
+        }
+    }
 }

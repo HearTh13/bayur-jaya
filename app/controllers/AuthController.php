@@ -8,10 +8,27 @@ class AuthController
     {
         $authModel = new AuthModel();
         $data = $authModel->findUserByEmail($email);
-        http_response_code(200);
-        echo json_encode([
-            "message" => "autentikasi berhasil",
-            "data" => $data,
-        ]);
+        if ($data) {
+            $dataPass = $authModel->getPasswordByMasterUserID($data["masterUserID"]);
+            if (password_verify($password, $dataPass)) {
+                http_response_code(200);
+                echo json_encode([
+                    "message" => "Autentikasi berhasil",
+                    "data" => $password,
+                ]);
+            } else {
+                http_response_code(401);
+                echo json_encode([
+                    "message" => "User Authentication Failed: Wrong User or Password",
+                    "data" => null,
+                ]);
+            }
+        } else {
+            http_response_code(401);
+            echo json_encode([
+                "message" => "User Authentication Failed: Wrong User or Password",
+                "data" => null,
+            ]);
+        }
     }
 }
