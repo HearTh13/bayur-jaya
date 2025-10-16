@@ -1,0 +1,5 @@
+RewriteEngine On 
+
+SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
+
+RewriteRule ^login/?$ public/login.php [NC,L]

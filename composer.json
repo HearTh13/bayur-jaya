@@ -1,0 +1,13 @@
+{
+    "name": "mppi2/api-mppi2-v1",
+    "description": "API login menggunakan JWT dengan PHP MVC",
+    "require": {
+        "firebase/php-jwt": "^6.0",
+        "midtrans/midtrans-php": "^2.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        }
+    }
+}
