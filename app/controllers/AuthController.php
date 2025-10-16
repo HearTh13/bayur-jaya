@@ -8,6 +8,7 @@ class AuthController
     {
         $authModel = new AuthModel();
         $data = $authModel->findUserByEmail($email);
+        http_response_code(200);
         echo json_encode([
             "message" => "autentikasi berhasil",
             "data" => $data,

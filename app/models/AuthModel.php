@@ -19,6 +19,7 @@ class AuthModel
             $stmt->execute();
             return $stmt->fetch(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
+            http_response_code(500);
             echo json_encode([
                 "message" => "something is wrong" . $e->getMessage(),
                 "data" => null,
