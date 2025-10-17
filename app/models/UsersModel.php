@@ -96,7 +96,7 @@ class UsersModel
             $masterUserID = $this->doGen_uuid();
             $stmt = $this->conn->prepare("
                 INSERT INTO `masterusers`
-                (`masterUserID`, `fullname`, `phoneNumber`, `address`, role, `birthPlaceDate`, `assignmentPlace`, `createdBy`, `createdDate`)
+                (`masterUserID`, `fullname`, `phoneNumber`, `address`, `role`, `birthPlaceDate`, `assignmentPlace`, `createdBy`, `createdDate`)
                 VALUES (:masterUserID, :fullname, :phoneNumber, :address, 'user', :birthPlaceDate, :assignmentPlace, :createdBy, :createdDate)
             ");
             $stmt->bindParam(':masterUserID', $masterUserID);
