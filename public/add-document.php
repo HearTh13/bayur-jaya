@@ -10,10 +10,10 @@ $requiredFields = [
 
 foreach ($requiredFields as $field) {
     if (!isset($data[$field])) {
-        http_response_code(500);
+        http_response_code(400);
         echo json_encode([
-            "message" => "something is wrong " . $e->getMessage(),
-            "data" => null,
+            "message" => "Bad Request",
+            "data" => $field,
         ]);
         exit;
     }

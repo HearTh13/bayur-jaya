@@ -8,7 +8,7 @@ if (!isset($data["email"]) || !isset($data["password"])) {
     http_response_code(400);
     echo json_encode([
         "message" => "Bad request",
-        "data" => null
+        "data" => $field
     ]);
 }
 

@@ -9,3 +9,4 @@ RewriteRule ^detail-profile/?$ public/detail-profile.php [NC,L]
 RewriteRule ^list-data/?$ public/list-data.php [NC,L]
 
 RewriteRule ^add-user/?$ public/add-user.php [NC,L]
+RewriteRule ^add-document/?$ public/add-document.php [NC,L]

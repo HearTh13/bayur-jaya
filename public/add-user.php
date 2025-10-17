@@ -27,7 +27,7 @@ foreach ($requiredFields as $field) {
         http_response_code(400);
         echo json_encode([
             "message" => "Bad request",
-            "data" => $data[$field],
+            "data" => $field,
         ]);
         exit;
     }

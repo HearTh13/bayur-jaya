@@ -67,27 +67,27 @@ class UsersModel
             $stmt->execute();
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            $stmt = $this->conn->prepare("SELECT * FROM users_documents WHERE masterUserID = :masterUserID AND deletedDate IS NULL");
+            $stmt = $this->conn->prepare("SELECT * FROM users_data WHERE masterUserID = :masterUserID AND deletedDate IS NULL");
             $stmt->bindParam("masterUserID", $masterUserID);
             $stmt->execute();
-            $document = $stmt->fetch(PDO::FETCH_ASSOC);
+            $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            $stmt = $this->conn->prepare("SELECT link FROM users_miscs WHERE usersDataID = :usersDataID AND deletedDate IS NULL");
-            $stmt->bindParam(":usersDataID", $document["usersDataID"]);
+            $stmt = $this->conn->prepare("SELECT link FROM users_documents WHERE usersDataID = :usersDataID AND deletedDate IS NULL");
+            $stmt->bindParam(":usersDataID", $data["usersDataID"]);
             $stmt->execute();
-            $misc = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $documents = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             $data = [
                 "masterUserID" => $user["masterUserID"],
                 "fullname" => $user["fullname"],
-                "departureDate" => $document["departureDate"],
-                "place" => $document["place"],
-                "miscs" => $misc,
-                "batch" => $document["batch"],
-                "loadAmount" => $document["loadAmount"],
-                "driverName" => $document["driverName"],
-                "vehicleNo" => $document["vehicleNo"],
-                "description" => $document["description"]
+                "departureDate" => $data["departureDate"],
+                "place" => $data["place"],
+                "miscs" => $documents,
+                "batch" => $data["batch"],
+                "loadAmount" => $data["loadAmount"],
+                "driverName" => $data["driverName"],
+                "vehicleNo" => $data["vehicleNo"],
+                "description" => $data["description"]
             ];
             return $data;
         } catch (PDOException $e) {
