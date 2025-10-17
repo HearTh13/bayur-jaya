@@ -28,4 +28,15 @@ class UsersController
             "data" => $data,
         ]);
     }
+
+    public function getDocument(){
+        $user = AuthMiddleware::authenticate();
+        $userModel = new UsersModel();
+        $data = $userModel->getDetailDocumentUser($user["masterUserID"]);
+        http_response_code(200);
+        echo json_encode([
+            "message" => "Data User berhasil diambil",
+            "data" => $data,
+        ]);
+    }
 }
