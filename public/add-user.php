@@ -13,13 +13,6 @@ $requiredFields = [
     "birthPlace",
     "birthDate",
     "assignmentPlace",
-    "departureDate",
-    "place",
-    "batch",
-    "loadAmount",
-    "driverName",
-    "vehicleNo",
-    "description",
 ];
 
 foreach ($requiredFields as $field) {
@@ -42,12 +35,5 @@ $controller->addUser(
     $data["address"],
     $data["birthPlace"],
     $data["birthDate"],
-    $data["assignmentPlace"],
-    $data["departureDate"],
-    $data["place"],
-    $data["batch"],
-    $data["loadAmount"],
-    $data["driverName"],
-    $data["vehicleNo"],
-    $data["description"],
+    $data["assignmentPlace"]
 );

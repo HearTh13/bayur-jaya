@@ -62,33 +62,20 @@ class UsersModel
     public function getDetailDocumentUser($masterUserID)
     {
         try {
-            $stmt = $this->conn->prepare("SELECT * FROM masterusers WHERE masterUserID = :masterUserID AND deletedDate IS NULL");
-            $stmt->bindParam(":masterUserID", $masterUserID);
-            $stmt->execute();
-            $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
             $stmt = $this->conn->prepare("SELECT * FROM users_data WHERE masterUserID = :masterUserID AND deletedDate IS NULL");
             $stmt->bindParam("masterUserID", $masterUserID);
             $stmt->execute();
-            $data = $stmt->fetch(PDO::FETCH_ASSOC);
+            $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            $stmt = $this->conn->prepare("SELECT link FROM users_documents WHERE usersDataID = :usersDataID AND deletedDate IS NULL");
-            $stmt->bindParam(":usersDataID", $data["usersDataID"]);
-            $stmt->execute();
-            $documents = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            foreach ($data as &$dataUser) {
+                $stmt = $this->conn->prepare("SELECT link FROM users_documents WHERE usersDataID = :usersDataID AND deletedDate IS NULL");
+                $stmt->bindParam(":usersDataID", $dataUser["usersDataID"]);
+                $stmt->execute();
+                $documents = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            $data = [
-                "masterUserID" => $user["masterUserID"],
-                "fullname" => $user["fullname"],
-                "departureDate" => $data["departureDate"],
-                "place" => $data["place"],
-                "miscs" => $documents,
-                "batch" => $data["batch"],
-                "loadAmount" => $data["loadAmount"],
-                "driverName" => $data["driverName"],
-                "vehicleNo" => $data["vehicleNo"],
-                "description" => $data["description"]
-            ];
+                $dataUser["documents"] = $documents;
+            }
+
             return $data;
         } catch (PDOException $e) {
             http_response_code(500);
@@ -100,7 +87,7 @@ class UsersModel
         }
     }
 
-    public function addUser($fullname, $email, $password, $phoneNumber, $address, $birthPlace, $birthDate, $assignmentPlace, $createdBy, $departureDate, $place, $batch, $loadAmount, $driverName, $vehicleNo, $description)
+    public function addUser($fullname, $email, $password, $phoneNumber, $address, $birthPlace, $birthDate, $assignmentPlace, $createdBy)
     {
         try {
             date_default_timezone_set("Asia/Bangkok");
@@ -139,26 +126,6 @@ class UsersModel
             $stmt->bindParam(':createdDate', $createdDate);
             $stmt->execute();
 
-            $usersDataID = $this->doGen_uuid();
-            $stmt = $this->conn->prepare("
-                INSERT INTO `users_data`
-                (`usersDataID`, `masterUserID`, `departureDate`, `place`, `batch`, `loadAmount`, `driverName`, `vehicleNo`, `description`, `createdBy`, `createdDate`)
-                VALUES (:usersDataID, :masterUserID, :departureDate, :place, :batch, :loadAmount, :driverName, :vehicleNo, :description, :createdBy, :createdDate)
-            ");
-
-            $stmt->bindParam(':usersDataID', $usersDataID);
-            $stmt->bindParam(':masterUserID', $masterUserID);
-            $stmt->bindParam(':departureDate', $departureDate);
-            $stmt->bindParam(':place', $place);
-            $stmt->bindParam(':batch', $batch);
-            $stmt->bindParam(':loadAmount', $loadAmount);
-            $stmt->bindParam(':driverName', $driverName);
-            $stmt->bindParam(':vehicleNo', $vehicleNo);
-            $stmt->bindParam(':description', $description);
-            $stmt->bindParam(":createdBy", $createdBy);
-            $stmt->bindParam(':createdDate', $createdDate);
-            $stmt->execute();
-
             return $this->getDetailProfileUser($masterUserID);
         } catch (PDOException $e) {
             http_response_code(500);
@@ -170,11 +137,32 @@ class UsersModel
         }
     }
 
-    public function addDocumentByMasterUserID($masterUserID, $modifiedBy, $documents)
+    public function addDocumentByMasterUserID($masterUserID, $modifiedBy, $documents, $name, $departureDate, $place, $batch, $loadAmount, $driverName, $vehicleNo, $description)
     {
         try {
             date_default_timezone_set("Asia/Bangkok");
             $modifiedDate = (new DateTime())->format('Y-m-d H:i:s');
+
+            $usersDataID = $this->doGen_uuid();
+            $stmt = $this->conn->prepare("
+                INSERT INTO `users_data`
+                (`usersDataID`, `masterUserID`, `name`, `departureDate`, `place`, `batch`, `loadAmount`, `driverName`, `vehicleNo`, `description`, `createdBy`, `createdDate`)
+                VALUES (:usersDataID, :masterUserID, :name, :departureDate, :place, :batch, :loadAmount, :driverName, :vehicleNo, :description, :createdBy, :createdDate)
+            ");
+            $stmt->bindParam(':usersDataID', $usersDataID);
+            $stmt->bindParam(':masterUserID', $masterUserID);
+            $stmt->bindParam(':name', $name);
+            $stmt->bindParam(':departureDate', $departureDate);
+            $stmt->bindParam(':place', $place);
+            $stmt->bindParam(':batch', $batch);
+            $stmt->bindParam(':loadAmount', $loadAmount);
+            $stmt->bindParam(':driverName', $driverName);
+            $stmt->bindParam(':vehicleNo', $vehicleNo);
+            $stmt->bindParam(':description', $description);
+            $stmt->bindParam(':createdBy', $modifiedBy);
+            $stmt->bindParam(':createdDate', $modifiedDate);
+
+            $stmt->execute();
 
             $stmt = $this->conn->prepare("SELECT * FROM users_data WHERE masterUserID = :masterUserID AND deletedDate IS NULL");
             $stmt->bindParam("masterUserID", $masterUserID);

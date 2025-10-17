@@ -7,6 +7,14 @@ $controller = new UsersController();
 $data = json_decode(file_get_contents("php://input"), true);
 
 $requiredFields = [
+    "namaUser",
+    "tanggal",
+    "lokasi",
+    "batch",
+    "muatan",
+    "namaSupir",
+    "noSupir",
+    "keterangan",
     "documents"
 ];
 
@@ -21,5 +29,14 @@ foreach ($requiredFields as $field) {
     }
 }
 
-// Jalankan fungsi controller
-$controller->addUserDocument($data["documents"]);
+$controller->addUserDocument(
+    $data["documents"],
+    $data["namaUser"],
+    $data["tanggal"],
+    $data["lokasi"],
+    $data["batch"],
+    $data["muatan"],
+    $data["namaSupir"],
+    $data["noSupir"],
+    $data["keterangan"]
+);

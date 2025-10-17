@@ -40,10 +40,10 @@ class UsersController
         ]);
     }
 
-    public function addUser($fullname, $email, $password, $phoneNumber, $address, $birthPlace, $birthDate, $assignmentPlace, $departureDate, $place, $batch, $loadAmount, $driverName, $vehicleNo, $description){
+    public function addUser($fullname, $email, $password, $phoneNumber, $address, $birthPlace, $birthDate, $assignmentPlace){
         $user = AuthMiddleware::authenticate();
         $userModel = new UsersModel();
-        $data = $userModel->addUser($fullname, $email, $password, $phoneNumber, $address, $birthPlace, $birthDate, $assignmentPlace, $user["masterUserID"], $departureDate, $place, $batch, $loadAmount, $driverName, $vehicleNo, $description);
+        $data = $userModel->addUser($fullname, $email, $password, $phoneNumber, $address, $birthPlace, $birthDate, $assignmentPlace, $user["masterUserID"]);
         http_response_code(200);
         echo json_encode([
             "message" => "Data User berhasil ditambahkan",
@@ -51,10 +51,10 @@ class UsersController
         ]);
     }
 
-    public function addUserDocument($documents){
+    public function addUserDocument($documents, $name, $departureDate, $place, $batch, $loadAmount, $driverName, $vehicleNo, $description){
         $user = AuthMiddleware::authenticate();
         $userModel = new UsersModel();
-        $data = $userModel->addDocumentByMasterUserID($user["masterUserID"], $user["masterUserID"], $documents);
+        $data = $userModel->addDocumentByMasterUserID($user["masterUserID"], $user["masterUserID"], $documents, $name, $departureDate, $place, $batch, $loadAmount, $driverName, $vehicleNo, $description);
         http_response_code(200);
         echo json_encode([
             "message" => "Dokumen User berhasil ditambahkan",
