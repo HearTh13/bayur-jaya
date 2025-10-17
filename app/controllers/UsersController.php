@@ -17,11 +17,12 @@ class UsersController
         ]);
     }
 
-    public function getUserDetail()
+    public function getUserDetail($masterUserID)
     {
         $user = AuthMiddleware::authenticate();
+        
         $usersModel = new UsersModel();
-        $data = $usersModel->getDetailProfileUser($user["masterUserID"]);
+        $data = $usersModel->getDetailProfileUser($masterUserID);
         http_response_code(200);
         echo json_encode([
             "message" => "Data User berhasil diambil",
@@ -33,7 +34,7 @@ class UsersController
         $user = AuthMiddleware::authenticate();
         $userModel = new UsersModel();
         $data = $userModel->getDetailDocumentUser($user["masterUserID"]);
-        http_response_code(200);
+        http_response_code(response_code: 200);
         echo json_encode([
             "message" => "Data User berhasil diambil",
             "data" => $data,
