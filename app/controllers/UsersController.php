@@ -16,4 +16,16 @@ class UsersController
             "data" => $data,
         ]);
     }
+
+    public function getUserDetail()
+    {
+        $user = AuthMiddleware::authenticate();
+        $usersModel = new UsersModel();
+        $data = $usersModel->getDetailProfileUser($user["masterUserID"]);
+        http_response_code(200);
+        echo json_encode([
+            "message" => "Data User berhasil diambil",
+            "data" => $data,
+        ]);
+    }
 }
