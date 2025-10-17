@@ -12,12 +12,14 @@ class AuthController
         if ($data) {
             $dataPass = $authModel->getPasswordByMasterUserID($data["masterUserID"]);
             if (password_verify($password, $dataPass)) {
-                http_response_code(200);
                 $token = JWTHandler::generateToken($data);
                 $authModel->addToken($token, $data["masterUserID"]);
+                header('Content-Type: application/json; charset=UTF-8');
                 header("Authorization: Bearer " . $token);
+                http_response_code(200);
                 echo json_encode([
                     "message" => "Autentikasi berhasil",
+                    "token" => $token,
                     "data" => $data,
                 ]);
             } else {

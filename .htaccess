@@ -3,3 +3,5 @@ RewriteEngine On
 SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
 
 RewriteRule ^login/?$ public/login.php [NC,L]
+
+RewriteRule ^list-user/?$ public/list-user.php [NC,L]
