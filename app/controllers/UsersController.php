@@ -20,7 +20,7 @@ class UsersController
     public function getUserDetail($masterUserID)
     {
         $user = AuthMiddleware::authenticate();
-        
+
         $usersModel = new UsersModel();
         $data = $usersModel->getDetailProfileUser($masterUserID);
         http_response_code(200);
@@ -30,7 +30,8 @@ class UsersController
         ]);
     }
 
-    public function getDocument(){
+    public function getDocument()
+    {
         $user = AuthMiddleware::authenticate();
         $userModel = new UsersModel();
         $data = $userModel->getDetailDocumentUser();
@@ -41,18 +42,28 @@ class UsersController
         ]);
     }
 
-    public function addUser($fullname, $email, $phoneNumber, $address, $birthPlaceDate, $assignmentPlace){
+    public function addUser($fullname, $email, $phoneNumber, $address, $birthPlaceDate, $assignmentPlace)
+    {
         $user = AuthMiddleware::authenticate();
-        $userModel = new UsersModel();
-        $data = $userModel->addUser($fullname, $email, $phoneNumber, $address, $birthPlaceDate, $assignmentPlace, $user["masterUserID"]);
-        http_response_code(200);
-        echo json_encode([
-            "message" => "Data User berhasil ditambahkan",
-            "data" => $data,
-        ]);
+        if ($user["role"] === "admin") {
+            $userModel = new UsersModel();
+            $data = $userModel->addUser($fullname, $email, $phoneNumber, $address, $birthPlaceDate, $assignmentPlace, $user["masterUserID"]);
+            http_response_code(200);
+            echo json_encode([
+                "message" => "Data User berhasil ditambahkan",
+                "data" => $data,
+            ]);
+        } else {
+            http_response_code(401);
+            echo json_encode([
+                "message" => "Unauthorized",
+                "data" => null,
+            ]);
+        }
     }
 
-    public function addUserDocument($documents, $masterUserID, $departureDate, $place, $batch, $loadAmount, $driverName, $vehicleNo, $description){
+    public function addUserDocument($documents, $masterUserID, $departureDate, $place, $batch, $loadAmount, $driverName, $vehicleNo, $description)
+    {
         $user = AuthMiddleware::authenticate();
         $userModel = new UsersModel();
         $userData = $userModel->getDetailProfileUser($masterUserID);
