@@ -41,18 +41,11 @@ class UsersModel
         return $date.$padded;
     }
 
-    private function doGen_uuid_form()
+    private function doGen_uuid_form($masterUserID)
     {
         $date = (new DateTime())->format("dmy");
-        $stmt = $this->conn->prepare("SELECT COUNT(*)+1 AS row FROM masterusers");
-        $stmt->execute();
-        $data = $stmt->fetch();
-        if ($data){
-            $count = $data["row"];
-        } else{
-            $count = "1";
-        }
-        $stmt = $this->conn->prepare("SELECT COUNT(*)+1 AS row FROM auth_users");
+        $id3 = substr($masterUserID, -3);
+        $stmt = $this->conn->prepare("SELECT COUNT(*)+1 AS row FROM users_data");
         $stmt->execute();
         $data = $stmt->fetch();
         if ($data){
@@ -60,7 +53,7 @@ class UsersModel
         } else{
             $count2 = "1";
         }
-        $padded = str_pad($count, 3, "0", STR_PAD_LEFT);
+        $padded = str_pad($id3, 3, "0", STR_PAD_LEFT);
         $padded2 = str_pad($count2, 3, "0", STR_PAD_LEFT);
         return $date.$padded.$padded2;
     }
@@ -183,7 +176,7 @@ class UsersModel
             date_default_timezone_set("Asia/Bangkok");
             $modifiedDate = (new DateTime())->format('Y-m-d H:i:s');
 
-            $usersDataID = $this->doGen_uuid_form();
+            $usersDataID = $this->doGen_uuid_form($masterUserID);
             $stmt = $this->conn->prepare("
                 INSERT INTO `users_data`
                 (`usersDataID`, `masterUserID`, `departureDate`, `place`, `batch`, `loadAmount`, `driverName`, `vehicleNo`, `description`, `createdBy`, `createdDate`)
