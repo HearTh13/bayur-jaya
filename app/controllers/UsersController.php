@@ -33,7 +33,7 @@ class UsersController
     public function getDocument(){
         $user = AuthMiddleware::authenticate();
         $userModel = new UsersModel();
-        $data = $userModel->getDetailDocumentUser($user["masterUserID"]);
+        $data = $userModel->getDetailDocumentUser();
         http_response_code(response_code: 200);
         echo json_encode([
             "message" => "Data User berhasil diambil",

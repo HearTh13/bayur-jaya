@@ -91,11 +91,10 @@ class UsersModel
         }
     }
 
-    public function getDetailDocumentUser($masterUserID)
+    public function getDetailDocumentUser()
     {
         try {
-            $stmt = $this->conn->prepare("SELECT * FROM users_data WHERE masterUserID = :masterUserID AND deletedDate IS NULL");
-            $stmt->bindParam("masterUserID", $masterUserID);
+            $stmt = $this->conn->prepare("SELECT * FROM users_data WHERE deletedDate IS NULL");
             $stmt->execute();
             $data = $stmt->fetchAll(mode: PDO::FETCH_ASSOC);
 
@@ -211,7 +210,7 @@ class UsersModel
                 $stmt->execute();
             }
 
-            return $this->getDetailDocumentUser($masterUserID);
+            return $data;
         } catch (PDOException $e) {
             http_response_code(500);
             echo json_encode([
