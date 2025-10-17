@@ -8,13 +8,21 @@ class UsersController
     public function getAllUsers()
     {
         $user = AuthMiddleware::authenticate();
-        $usersModel = new UsersModel();
-        $data = $usersModel->getAllUsers();
-        http_response_code(200);
-        echo json_encode([
-            "message" => "Data User berhasil diambil",
-            "data" => $data,
-        ]);
+        if ($user["role"] === "admin") {
+            $usersModel = new UsersModel();
+            $data = $usersModel->getAllUsers();
+            http_response_code(200);
+            echo json_encode([
+                "message" => "Data User berhasil diambil",
+                "data" => $data,
+            ]);
+        } else {
+            http_response_code(401);
+            echo json_encode([
+                "message" => "Unauthorized",
+                "data" => null,
+            ]);
+        }
     }
 
     public function getUserDetail($masterUserID)
