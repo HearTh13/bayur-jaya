@@ -28,6 +28,6 @@ $controller->addUser(
     $data["fullname"],
     $data["phoneNumber"],
     $data["address"],
-    $data["birthPlace"],
+    $data["birthPlaceDate"],
     $data["tempatPenugasan"]
 );

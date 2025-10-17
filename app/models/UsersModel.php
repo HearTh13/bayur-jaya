@@ -90,19 +90,21 @@ class UsersModel
     public function addUser($fullname, $phoneNumber, $address, $birthPlaceDate, $assignmentPlace, $createdBy)
     {
         try {
+            
             date_default_timezone_set("Asia/Bangkok");
-            $createdDate = (new DateTime())->format(format: 'Y-m-d H:i:s');
+            $createdDate = (new DateTime())->format('Y-m-d H:i:s');
 
             $masterUserID = $this->doGen_uuid();
-            $stmt = $this->conn->prepare("
-                INSERT INTO `masterusers`
+            $stmt = $this->conn->prepare("INSERT INTO `masterusers`
                 (`masterUserID`, `fullname`, `phoneNumber`, `address`, `role`, `birthPlaceDate`, `assignmentPlace`, `createdBy`, `createdDate`)
-                VALUES (:masterUserID, :fullname, :phoneNumber, :address, 'user', :birthPlaceDate, :assignmentPlace, :createdBy, :createdDate)
+                VALUES (:masterUserID, :fullname, :phoneNumber, :address, :role, :birthPlaceDate, :assignmentPlace, :createdBy, :createdDate)
             ");
+            $role = 'user';
             $stmt->bindParam(':masterUserID', $masterUserID);
             $stmt->bindParam(':fullname', $fullname);
             $stmt->bindParam(':phoneNumber', $phoneNumber);
             $stmt->bindParam(':address', $address);
+            $stmt->bindParam(':role', $role);
             $stmt->bindParam(':birthPlaceDate', $birthPlaceDate);
             $stmt->bindParam(':assignmentPlace', $assignmentPlace);
             $stmt->bindParam(':createdBy', $createdBy);
@@ -115,7 +117,7 @@ class UsersModel
                 (`usersDataID`, `masterUserID`, `createdBy`, `createdDate`)
                 VALUES (:usersDataID, :masterUserID, :createdBy, :createdDate)
             ");
-            $stmt->bindParam(":usersDataID", $usersDataID);
+            $stmt->bindParam(':usersDataID', $usersDataID);
             $stmt->bindParam(':masterUserID', $masterUserID);
             $stmt->bindParam(':createdBy', $createdBy);
             $stmt->bindParam(':createdDate', $createdDate);
@@ -131,6 +133,7 @@ class UsersModel
             exit;
         }
     }
+
 
     public function addDocumentByMasterUserID($masterUserID, $modifiedBy, $documents, $name, $departureDate, $place, $batch, $loadAmount, $driverName, $vehicleNo, $description)
     {
