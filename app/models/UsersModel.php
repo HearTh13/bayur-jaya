@@ -103,7 +103,7 @@ class UsersModel
             $stmt->bindParam(':fullname', $fullname);
             $stmt->bindParam(':phoneNumber', $phoneNumber);
             $stmt->bindParam(':address', $address);
-            $stmt->bindParam(':birthPlace', $birthPlaceDate);
+            $stmt->bindParam(':birthPlaceDate', $birthPlaceDate);
             $stmt->bindParam(':assignmentPlace', $assignmentPlace);
             $stmt->bindParam(':createdBy', $createdBy);
             $stmt->bindParam(':createdDate', $createdDate);
