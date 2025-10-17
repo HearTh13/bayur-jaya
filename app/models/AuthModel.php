@@ -42,4 +42,19 @@ class AuthModel
             ]);
         }
     }
+
+    public function addToken($accessToken, $masterUserID){
+        try{
+            $stmt = $this->conn->prepare("UPDATE auth_users SET `accessToken` = :accessToken WHERE masterUserID = :masterUserID");
+            $stmt->bindParam(":accessToken", $accessToken);
+            $stmt->bindParam(":masterUserID", $masterUserID);
+            $stmt->execute();
+        }catch(PDOException $e){
+            http_response_code(500);
+            echo json_encode([
+                "message" => "something is wrong" . $e->getMessage(),
+                "data" => null,
+            ]);
+        }
+    }
 }

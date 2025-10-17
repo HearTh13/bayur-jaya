@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/../models/AuthModel.php';
+require_once __DIR__ . '/../core/JWT.php';
 
 class AuthController
 {
@@ -12,9 +13,12 @@ class AuthController
             $dataPass = $authModel->getPasswordByMasterUserID($data["masterUserID"]);
             if (password_verify($password, $dataPass)) {
                 http_response_code(200);
+                $token = JWTHandler::generateToken($data);
+                $authModel->addToken($token, $data["masterUserID"]);
+                header("Authorization: Bearer " . $token);
                 echo json_encode([
                     "message" => "Autentikasi berhasil",
-                    "data" => $password,
+                    "data" => $data,
                 ]);
             } else {
                 http_response_code(401);

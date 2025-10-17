@@ -3,7 +3,7 @@
         'name' => 'mppi2/api-mppi2-v1',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '40dc465f88071073430a0fa6ed07c4bbe92e172a',
+        'reference' => '3043c220b7d6c9391176c1bbc8e3ce1594bc4421',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -11,9 +11,9 @@
     ),
     'versions' => array(
         'firebase/php-jwt' => array(
-            'pretty_version' => 'v6.10.0',
-            'version' => '6.10.0.0',
-            'reference' => 'a49db6f0a5033aef5143295342f1c95521b075ff',
+            'pretty_version' => 'v6.11.1',
+            'version' => '6.11.1.0',
+            'reference' => 'd1e91ecf8c598d073d0995afa8cd5c75c6e19e66',
             'type' => 'library',
             'install_path' => __DIR__ . '/../firebase/php-jwt',
             'aliases' => array(),
@@ -31,7 +31,7 @@
         'mppi2/api-mppi2-v1' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '40dc465f88071073430a0fa6ed07c4bbe92e172a',
+            'reference' => '3043c220b7d6c9391176c1bbc8e3ce1594bc4421',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
