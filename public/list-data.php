@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/../app/controllers/UsersController.php';
+// require_once __DIR__ . '/../app/controllers/UsersController.php';
 
-$controller = new UsersController();
-$controller->getDocument();
+// $controller = new UsersController();
+// $controller->getDocument();
