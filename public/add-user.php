@@ -6,6 +6,7 @@ $data = json_decode(file_get_contents("php://input"), true);
 
 $requiredFields = [
     "fullname",
+    "email",
     "phoneNumber",
     "address",
     "birthPlaceDate",
@@ -26,6 +27,7 @@ foreach ($requiredFields as $field) {
 $controller = new UsersController();
 $controller->addUser(
     $data["fullname"],
+    $data["email"],
     $data["phoneNumber"],
     $data["address"],
     $data["birthPlaceDate"],

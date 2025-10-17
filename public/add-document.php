@@ -7,7 +7,7 @@ $controller = new UsersController();
 $data = json_decode(file_get_contents("php://input"), true);
 
 $requiredFields = [
-    "namaUser",
+    "masterUserID",
     "tanggal",
     "lokasi",
     "batch",
@@ -31,7 +31,7 @@ foreach ($requiredFields as $field) {
 
 $controller->addUserDocument(
     $data["documents"],
-    $data["namaUser"],
+    $data["masterUserID"],
     $data["tanggal"],
     $data["lokasi"],
     $data["batch"],
