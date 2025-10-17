@@ -176,11 +176,16 @@ class UsersModel
             date_default_timezone_set("Asia/Bangkok");
             $modifiedDate = (new DateTime())->format('Y-m-d H:i:s');
 
+            $stmt = $this->conn->prepare("SELECT * FROM users_data WHERE masterUserID = :masterUserID AND deletedDate IS NULL");
+            $stmt->bindParam("masterUserID", $masterUserID);
+            $stmt->execute();
+            $data = $stmt->fetch(PDO::FETCH_ASSOC);
+
             foreach ($documents as $document) {
                 $usersDocumentsID = $this->doGen_uuid();
-                $stmt = $this->conn->prepare("INSERT INTO users_documents (usersDocumentsID, usersDataID, link, createdBy, createdDate) VALUES (:usersMiscID, :usersDataID, :link, :createdBy, :createdDate)");
+                $stmt = $this->conn->prepare("INSERT INTO users_documents (usersDocumentsID, usersDataID, link, createdBy, createdDate) VALUES (:usersDocumentsID, :usersDataID, :link, :createdBy, :createdDate)");
                 $stmt->bindParam(":usersDocumentsID", $usersDocumentsID);
-                $stmt->bindParam(":usersDataID", $document["usersDataID"]);
+                $stmt->bindParam(":usersDataID", $data["usersDataID"]);
                 $stmt->bindParam(":link", $document);
                 $stmt->bindParam(":createdBy", $modifiedBy);
                 $stmt->bindParam(":createdDate", $modifiedDate);

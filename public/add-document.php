@@ -4,6 +4,8 @@ require_once __DIR__ . '/../app/controllers/UsersController.php';
 
 $controller = new UsersController();
 
+$data = json_decode(file_get_contents("php://input"), true);
+
 $requiredFields = [
     "documents"
 ];
@@ -19,4 +21,5 @@ foreach ($requiredFields as $field) {
     }
 }
 
+// Jalankan fungsi controller
 $controller->addUserDocument($data["documents"]);
