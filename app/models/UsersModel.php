@@ -87,7 +87,7 @@ class UsersModel
         }
     }
 
-    public function addUser($fullname, $email, $password, $phoneNumber, $address, $birthPlace, $birthDate, $assignmentPlace, $createdBy)
+    public function addUser($fullname, $phoneNumber, $address, $birthPlaceDate, $assignmentPlace, $createdBy)
     {
         try {
             date_default_timezone_set("Asia/Bangkok");
@@ -96,32 +96,27 @@ class UsersModel
             $masterUserID = $this->doGen_uuid();
             $stmt = $this->conn->prepare("
                 INSERT INTO `masterusers`
-                (`masterUserID`, `fullname`, `email`, `phoneNumber`, `address`, role, `birthPlace`, `birthDate`, `assignmentPlace`, `createdBy`, `createdDate`)
-                VALUES (:masterUserID, :fullname, :email, :phoneNumber, :address, 'user', :birthPlace, :birthDate, :assignmentPlace, :createdBy, :createdDate)
+                (`masterUserID`, `fullname`, `phoneNumber`, `address`, role, `birthPlaceDate`, `assignmentPlace`, `createdBy`, `createdDate`)
+                VALUES (:masterUserID, :fullname, :phoneNumber, :address, 'user', :birthPlaceDate, :assignmentPlace, :createdBy, :createdDate)
             ");
             $stmt->bindParam(':masterUserID', $masterUserID);
             $stmt->bindParam(':fullname', $fullname);
-            $stmt->bindParam(':email', $email);
             $stmt->bindParam(':phoneNumber', $phoneNumber);
             $stmt->bindParam(':address', $address);
-            $stmt->bindParam(':birthPlace', $birthPlace);
-            $stmt->bindParam(':birthDate', $birthDate);
+            $stmt->bindParam(':birthPlace', $birthPlaceDate);
             $stmt->bindParam(':assignmentPlace', $assignmentPlace);
             $stmt->bindParam(':createdBy', $createdBy);
             $stmt->bindParam(':createdDate', $createdDate);
             $stmt->execute();
 
-            $password = password_hash($password, PASSWORD_DEFAULT);
-
-            $authUsersID = $this->doGen_uuid();
+            $usersDataID = $this->doGen_uuid();
             $stmt = $this->conn->prepare("
-                INSERT INTO `auth_users`
-                (`authUsersID`, `masterUserID`, `password`, `createdBy`, `createdDate`)
-                VALUES (:authUsersID, :masterUserID, :password, :createdBy, :createdDate)
+                INSERT INTO `users_data`
+                (`usersDataID`, `masterUserID`, `createdBy`, `createdDate`)
+                VALUES (:usersDataID, :masterUserID, :createdBy, :createdDate)
             ");
-            $stmt->bindParam(':authUsersID', $authUsersID);
+            $stmt->bindParam(":usersDataID", $usersDataID);
             $stmt->bindParam(':masterUserID', $masterUserID);
-            $stmt->bindParam(':password', $password);
             $stmt->bindParam(':createdBy', $createdBy);
             $stmt->bindParam(':createdDate', $createdDate);
             $stmt->execute();
@@ -143,13 +138,21 @@ class UsersModel
             date_default_timezone_set("Asia/Bangkok");
             $modifiedDate = (new DateTime())->format('Y-m-d H:i:s');
 
-            $usersDataID = $this->doGen_uuid();
             $stmt = $this->conn->prepare("
-                INSERT INTO `users_data`
-                (`usersDataID`, `masterUserID`, `name`, `departureDate`, `place`, `batch`, `loadAmount`, `driverName`, `vehicleNo`, `description`, `createdBy`, `createdDate`)
-                VALUES (:usersDataID, :masterUserID, :name, :departureDate, :place, :batch, :loadAmount, :driverName, :vehicleNo, :description, :createdBy, :createdDate)
+                UPDATE `users_data`
+                SET 
+                    `name` = :name,
+                    `departureDate` = :departureDate,
+                    `place` = :place,
+                    `batch` = :batch,
+                    `loadAmount` = :loadAmount,
+                    `driverName` = :driverName,
+                    `vehicleNo` = :vehicleNo,
+                    `description` = :description,
+                    `modifiedBy` = :modifiedBy,
+                    `modifiedDate` = :modifiedDate
+                WHERE `masterUserID` = :masterUserID
             ");
-            $stmt->bindParam(':usersDataID', $usersDataID);
             $stmt->bindParam(':masterUserID', $masterUserID);
             $stmt->bindParam(':name', $name);
             $stmt->bindParam(':departureDate', $departureDate);

@@ -40,10 +40,10 @@ class UsersController
         ]);
     }
 
-    public function addUser($fullname, $email, $password, $phoneNumber, $address, $birthPlace, $birthDate, $assignmentPlace){
+    public function addUser($fullname, $phoneNumber, $address, $birthPlaceDate, $assignmentPlace){
         $user = AuthMiddleware::authenticate();
         $userModel = new UsersModel();
-        $data = $userModel->addUser($fullname, $email, $password, $phoneNumber, $address, $birthPlace, $birthDate, $assignmentPlace, $user["masterUserID"]);
+        $data = $userModel->addUser($fullname, $phoneNumber, $address, $birthPlaceDate, $assignmentPlace, $user["masterUserID"]);
         http_response_code(200);
         echo json_encode([
             "message" => "Data User berhasil ditambahkan",
