@@ -21,9 +21,10 @@ class AuthModel
         } catch (PDOException $e) {
             http_response_code(500);
             echo json_encode([
-                "message" => "something is wrong" . $e->getMessage(),
+                "message" => "something is wrong " . $e->getMessage(),
                 "data" => null,
             ]);
+            exit;
         }
     }
 
@@ -37,9 +38,10 @@ class AuthModel
         } catch (PDOException $e) {
             http_response_code(500);
             echo json_encode([
-                "message" => "something is wrong" . $e->getMessage(),
+                "message" => "something is wrong " . $e->getMessage(),
                 "data" => null,
             ]);
+            exit;
         }
     }
 
@@ -52,9 +54,10 @@ class AuthModel
         }catch(PDOException $e){
             http_response_code(500);
             echo json_encode([
-                "message" => "something is wrong" . $e->getMessage(),
+                "message" => "something is wrong " . $e->getMessage(),
                 "data" => null,
             ]);
+            exit;
         }
     }
 }

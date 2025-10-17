@@ -40,13 +40,24 @@ class UsersController
         ]);
     }
 
-    public function addUser($fullname, $email, $password, $phoneNumber, $address, $birthPlace, $birthDate, $assignmentPlace, $createdBy){
+    public function addUser($fullname, $email, $password, $phoneNumber, $address, $birthPlace, $birthDate, $assignmentPlace, $departureDate, $place, $batch, $loadAmount, $driverName, $vehicleNo, $description){
         $user = AuthMiddleware::authenticate();
         $userModel = new UsersModel();
-        $data = $userModel->addUser($fullname, $email, $password, $phoneNumber, $address, $birthPlace, $birthDate, $assignmentPlace, $createdBy);
+        $data = $userModel->addUser($fullname, $email, $password, $phoneNumber, $address, $birthPlace, $birthDate, $assignmentPlace, $user["masterUserID"], $departureDate, $place, $batch, $loadAmount, $driverName, $vehicleNo, $description);
         http_response_code(200);
         echo json_encode([
-            "message" => "Data User berhasil diambil",
+            "message" => "Data User berhasil ditambahkan",
+            "data" => $data,
+        ]);
+    }
+
+    public function addUserDocument($documents){
+        $user = AuthMiddleware::authenticate();
+        $userModel = new UsersModel();
+        $data = $userModel->addDocumentByMasterUserID($user["masterUserID"], $user["masterUserID"], $documents);
+        http_response_code(200);
+        echo json_encode([
+            "message" => "Dokumen User berhasil ditambahkan",
             "data" => $data,
         ]);
     }
