@@ -100,8 +100,8 @@ class UsersModel
             $data = $stmt->fetchAll(mode: PDO::FETCH_ASSOC);
 
             foreach ($data as &$dataUser) {
-                $stmt = $this->conn->prepare("SELECT link FROM users_documents WHERE usersDataID = :usersDataID AND deletedDate IS NULL");
-                $stmt->bindParam(":usersDataID", $dataUser["usersDataID"]);
+                $stmt = $this->conn->prepare("SELECT link FROM users_documents WHERE formID = :formID AND deletedDate IS NULL");
+                $stmt->bindParam(":formID", $dataUser["formID"]);
                 $stmt->execute();
                 $documents = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -176,13 +176,13 @@ class UsersModel
             date_default_timezone_set("Asia/Bangkok");
             $modifiedDate = (new DateTime())->format('Y-m-d H:i:s');
 
-            $usersDataID = $this->doGen_uuid_form($masterUserID);
+            $formID = $this->doGen_uuid_form($masterUserID);
             $stmt = $this->conn->prepare("
                 INSERT INTO `users_data`
-                (`usersDataID`, `masterUserID`, `departureDate`, `place`, `batch`, `loadAmount`, `driverName`, `vehicleNo`, `description`, `createdBy`, `createdDate`)
-                VALUES (:usersDataID, :masterUserID, :departureDate, :place, :batch, :loadAmount, :driverName, :vehicleNo, :description, :createdBy, :createdDate)
+                (`formID`, `masterUserID`, `departureDate`, `place`, `batch`, `loadAmount`, `driverName`, `vehicleNo`, `description`, `createdBy`, `createdDate`)
+                VALUES (:formID, :masterUserID, :departureDate, :place, :batch, :loadAmount, :driverName, :vehicleNo, :description, :createdBy, :createdDate)
             ");
-            $stmt->bindParam(':usersDataID', $usersDataID);
+            $stmt->bindParam(':formID', $formID);
             $stmt->bindParam(':masterUserID', $masterUserID);
             $stmt->bindParam(':departureDate', $departureDate);
             $stmt->bindParam(':place', $place);
@@ -195,16 +195,16 @@ class UsersModel
             $stmt->bindParam(':createdDate', $modifiedDate);
             $stmt->execute();
 
-            $stmt = $this->conn->prepare("SELECT * FROM users_data WHERE usersDataID = :usersDataID AND deletedDate IS NULL");
-            $stmt->bindParam("usersDataID", $usersDataID);
+            $stmt = $this->conn->prepare("SELECT * FROM users_data WHERE formID = :formID AND deletedDate IS NULL");
+            $stmt->bindParam("formID", $formID);
             $stmt->execute();
             $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
             foreach ($documents as $document) {
                 $usersDocumentsID = $this->doGen_uuid();
-                $stmt = $this->conn->prepare("INSERT INTO users_documents (usersDocumentsID, usersDataID, link, createdBy, createdDate) VALUES (:usersDocumentsID, :usersDataID, :link, :createdBy, :createdDate)");
+                $stmt = $this->conn->prepare("INSERT INTO users_documents (usersDocumentsID, formID, link, createdBy, createdDate) VALUES (:usersDocumentsID, :formID, :link, :createdBy, :createdDate)");
                 $stmt->bindParam(":usersDocumentsID", $usersDocumentsID);
-                $stmt->bindParam(":usersDataID", $data["usersDataID"]);
+                $stmt->bindParam(":formID", $data["formID"]);
                 $stmt->bindParam(":link", $document);
                 $stmt->bindParam(":createdBy", $modifiedBy);
                 $stmt->bindParam(":createdDate", $modifiedDate);
