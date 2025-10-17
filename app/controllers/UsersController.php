@@ -31,11 +31,28 @@ class UsersController
 
         $usersModel = new UsersModel();
         $data = $usersModel->getDetailProfileUser($masterUserID);
-        http_response_code(200);
-        echo json_encode([
-            "message" => "Data User berhasil diambil",
-            "data" => $data,
-        ]);
+
+        if ($user["role"] === 'admin') {
+            http_response_code(200);
+            echo json_encode([
+                "message" => "Data User berhasil diambil",
+                "data" => $data,
+            ]);
+        } else {
+            if ($user["masterUserID"] === $data["masterUserID"]) {
+                http_response_code(200);
+                echo json_encode([
+                    "message" => "Data User berhasil diambil",
+                    "data" => $data,
+                ]);
+            } else {
+                http_response_code(401);
+                echo json_encode([
+                    "message" => "Unauthorized",
+                    "data" => null,
+                ]);
+            }
+        }
     }
 
     public function getDocument()
