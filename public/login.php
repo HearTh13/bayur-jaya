@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/../app/controllers/AuthController.php';
+include __DIR__ . '/../header.php';
 
 $data = json_decode(file_get_contents("php://input"), true);
 
