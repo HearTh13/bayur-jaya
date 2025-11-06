@@ -32,13 +32,13 @@ class UsersModel
         $stmt = $this->conn->prepare("SELECT COUNT(*)+1 AS row FROM masterusers");
         $stmt->execute();
         $data = $stmt->fetch();
-        if ($data){
+        if ($data) {
             $count = $data["row"];
-        } else{
+        } else {
             $count = "1";
         }
         $padded = str_pad($count, 3, "0", STR_PAD_LEFT);
-        return $date.$padded;
+        return $date . $padded;
     }
 
     private function doGen_uuid_form($masterUserID)
@@ -48,14 +48,14 @@ class UsersModel
         $stmt = $this->conn->prepare("SELECT COUNT(*)+1 AS row FROM users_data");
         $stmt->execute();
         $data = $stmt->fetch();
-        if ($data){
+        if ($data) {
             $count2 = $data["row"];
-        } else{
+        } else {
             $count2 = "1";
         }
         $padded = str_pad($id3, 3, "0", STR_PAD_LEFT);
         $padded2 = str_pad($count2, 3, "0", STR_PAD_LEFT);
-        return $date.$padded.$padded2;
+        return $date . $padded . $padded2;
     }
 
     public function getAllUsers()
@@ -91,10 +91,27 @@ class UsersModel
         }
     }
 
-    public function getDetailDocumentUser()
+    public function getDetailDocumentUser($masterUserID, $date)
     {
         try {
-            $stmt = $this->conn->prepare("SELECT * FROM users_data WHERE deletedDate IS NULL");
+            $query = ("SELECT * FROM users_data WHERE deletedDate IS NULL");
+            if ($masterUserID) {
+                $query .= " AND masterUserID = :masterUserID";
+            }
+            if ($date) {
+                $query .= " AND DATE(departureDate) = :date";
+            }
+            $stmt = $this->conn->prepare($query);
+            if ($masterUserID) {
+                $stmt->bindParam(":masterUserID", $masterUserID);
+            }
+            if ($date) {
+                if (preg_match('/^\d{2}-\d{2}-\d{4}$/', $date)) {
+                    $date = DateTime::createFromFormat('d-m-Y', $date);
+                    $date = $date ? $date->format('Y-m-d') : null;
+                }
+                $stmt->bindParam(":date", $date);
+            }
             $stmt->execute();
             $data = $stmt->fetchAll(mode: PDO::FETCH_ASSOC);
 
